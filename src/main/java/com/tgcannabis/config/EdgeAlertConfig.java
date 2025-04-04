@@ -14,6 +14,9 @@ public class EdgeAlertConfig {
     private final String mqttClientId;
     private final String mqttTopic;
 
+    /**
+     * Initializes the key connection configuration value and keys by reading the env file
+     */
     public EdgeAlertConfig() {
         Dotenv dotenv = Dotenv.configure()
                 .ignoreIfMissing()

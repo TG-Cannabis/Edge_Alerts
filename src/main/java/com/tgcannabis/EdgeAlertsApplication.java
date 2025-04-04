@@ -7,10 +7,22 @@ import com.tgcannabis.mqtt.MqttService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+/**
+ * The EdgeAlertsApplication class is the entry point for the Edge Alerts monitoring system.
+ * It initializes the MQTT service, alert processing, and configuration loading to monitor
+ * sensor data and trigger alerts when thresholds are exceeded.
+ */
 public class EdgeAlertsApplication {
     private static final Logger LOGGER = LoggerFactory.getLogger(EdgeAlertsApplication.class);
     private static MqttService mqttService;
 
+    /**
+     * Starts the Edge Alerts application.
+     * - Loads the alert configuration.
+     * - Initializes the alert processor.
+     * - Sets up the MQTT service and connects to the broker.
+     * - Registers a shutdown hook for graceful termination.
+     */
     private void start() {
         try {
             AlertConfigLoader configLoader = new AlertConfigLoader();
@@ -18,7 +30,7 @@ public class EdgeAlertsApplication {
             mqttService = new MqttService(new EdgeAlertConfig());
             mqttService.setMessageHandler(alertProcessor);
             mqttService.connect();
-            
+
             addShutdownHook();
 
             LOGGER.info("Edge Alerts Application started successfully and is now monitoring sensor data...");

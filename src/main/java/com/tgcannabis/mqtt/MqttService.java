@@ -12,6 +12,11 @@ import org.slf4j.LoggerFactory;
 import java.util.Objects;
 import java.util.function.BiConsumer;
 
+/**
+ * Manages MQTT connection, subscription, and message handling.
+ * This service allows connecting to an MQTT broker, handling messages,
+ * and disconnecting gracefully.
+ */
 public class MqttService implements AutoCloseable {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(MqttService.class);
@@ -20,13 +25,29 @@ public class MqttService implements AutoCloseable {
 
     private final EdgeAlertConfig config;
 
+    /**
+     * Functional interface for handling incoming MQTT messages.
+     * Accepts a topic and message payload.
+     */
     @Setter
     private BiConsumer<String, String> messageHandler;
 
+    /**
+     * Constructs the MQTT service with the provided configuration.
+     *
+     * @param config The MQTT configuration settings. Must not be null.
+     * @throws NullPointerException if config is null.
+     */
     public MqttService(EdgeAlertConfig config) {
         this.config = Objects.requireNonNull(config, "Configuration cannot be null");
     }
 
+    /**
+     * Establishes a connection to the MQTT broker and sets up message handling.
+     *
+     * @throws MqttException        If the connection to the broker fails.
+     * @throws NullPointerException If messageHandler is not set before connecting.
+     */
     public void connect() throws MqttException {
         Objects.requireNonNull(messageHandler, "Message handler must be set before connecting");
 
@@ -46,6 +67,10 @@ public class MqttService implements AutoCloseable {
         }
     }
 
+    /**
+     * Closes the MQTT connection gracefully.
+     * Ensures disconnection before shutting down the client.
+     */
     @Override
     public void close() {
         if (mqttClient != null && mqttClient.isConnected()) {
@@ -61,6 +86,9 @@ public class MqttService implements AutoCloseable {
         }
     }
 
+    /**
+     * Closes the MQTT client instance quietly, suppressing any exceptions.
+     */
     private void closeClientQuietly() {
         try {
             mqttClient.close();
