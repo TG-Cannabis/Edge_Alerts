@@ -22,7 +22,7 @@ public class MqttCustomCallback implements MqttCallbackExtended {
 
     @Override
     public void connectComplete(boolean reconnect, String serverURI) {
-        LOGGER.info("MQTT Connection {}complete to {}", (reconnect ? "re" : ""), serverURI);
+        LOGGER.info("MQTT Connection {} complete to {}", (reconnect ? "re" : ""), serverURI);
         subscribe();
     }
 

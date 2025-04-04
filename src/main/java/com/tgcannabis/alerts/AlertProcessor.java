@@ -61,7 +61,7 @@ public class AlertProcessor implements BiConsumer<String, String> {
         List<SensorData> dataList = history.get(sensorType);
         dataList.add(data);
 
-        long now = System.currentTimeMillis();
+        long now = Instant.now().getEpochSecond();
         dataList.removeIf(d -> (now - d.getTimestamp()) > threshold.getTimeThreshold());
 
         if (dataList.isEmpty()) return;

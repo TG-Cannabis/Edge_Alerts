@@ -41,7 +41,7 @@ public class MqttService implements AutoCloseable {
         try {
             mqttClient.connect();
         } catch (MqttException e) {
-            LOGGER.error("Error connecting MQTT clinet: {}", e.getMessage(), e);
+            LOGGER.error("Error connecting MQTT client: {}", e.getMessage(), e);
             throw e;
         }
     }
