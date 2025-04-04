@@ -30,6 +30,7 @@ public class AlertProcessor implements BiConsumer<String, String> {
 
     private final Map<String, List<SensorData>> history = new ConcurrentHashMap<>();
     private final AlertConfigLoader configLoader;
+    private final Map<String, Long> firstEvaluationTime = new ConcurrentHashMap<>(); // Track first sensor data time
 
     /**
      * Constructs an {@code AlertProcessor} with a specified configuration loader for sensor thresholds.
@@ -90,7 +91,15 @@ public class AlertProcessor implements BiConsumer<String, String> {
         long now = Instant.now().getEpochSecond();
         dataList.removeIf(d -> (now - d.getTimestamp()) > threshold.getTimeThreshold());
 
-        if (dataList.isEmpty()) return;
+        // Record first evaluation time for this sensor type (if not already set)
+        firstEvaluationTime.putIfAbsent(sensorType, now);
+
+        // Ensure that at least 'timeThreshold' seconds have passed since first data was received
+        long firstTime = firstEvaluationTime.get(sensorType);
+        if ((now - firstTime) < threshold.getTimeThreshold()) {
+            LOGGER.info("Waiting for full time threshold before evaluating alerts for sensor: {}", sensorType);
+            return;
+        }
 
         // Calculate the percentage of readings that are out of range
         long outOfRangeCount = dataList.stream()
@@ -98,9 +107,10 @@ public class AlertProcessor implements BiConsumer<String, String> {
                 .count();
         double percentageOut = (100.0 * outOfRangeCount) / dataList.size();
 
-        // Triggers the alert if out-of-range readings exceed given threshold
+        // Trigger the alert if the percentage exceeds the configured threshold
         if (percentageOut >= threshold.getPercentageThreshold()) {
             generateAlert(data, threshold, percentageOut);
+            firstEvaluationTime.put(sensorType, now); // Reset first evaluation time after generating an alert
         }
     }
 
