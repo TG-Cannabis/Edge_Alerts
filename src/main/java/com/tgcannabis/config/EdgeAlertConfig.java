@@ -14,12 +14,6 @@ public class EdgeAlertConfig {
     private final String mqttClientId;
     private final String mqttTopic;
 
-    public EdgeAlertConfig(String mqttBroker, String mqttClientId, String mqttTopic) {
-        this.mqttBroker = mqttBroker;
-        this.mqttClientId = mqttClientId;
-        this.mqttTopic = mqttTopic;
-    }
-
     public EdgeAlertConfig() {
         Dotenv dotenv = Dotenv.configure()
                 .ignoreIfMissing()
