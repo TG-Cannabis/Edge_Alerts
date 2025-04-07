@@ -1,4 +1,4 @@
-package com.tgcannabis.mqtt;
+package com.tgcannabis.edge_alerts.mqtt;
 
 import org.eclipse.paho.client.mqttv3.*;
 import org.slf4j.Logger;

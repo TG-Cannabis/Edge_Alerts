@@ -1,11 +1,10 @@
-package com.tgcannabis.alerts;
+package com.tgcannabis.edge_alerts.alerts;
 
 import com.google.gson.Gson;
 import com.google.gson.JsonSyntaxException;
-import com.tgcannabis.config.AlertConfigLoader;
-import com.tgcannabis.model.SensorData;
-import com.tgcannabis.model.SensorInformation;
-import com.tgcannabis.model.SensorThreshold;
+import com.tgcannabis.edge_alerts.config.AlertConfigLoader;
+import com.tgcannabis.edge_alerts.model.SensorData;
+import com.tgcannabis.edge_alerts.model.SensorThreshold;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 

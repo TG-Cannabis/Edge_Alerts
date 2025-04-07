@@ -1,4 +1,4 @@
-package com.tgcannabis.model;
+package com.tgcannabis.edge_alerts.model;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;

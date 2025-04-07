@@ -1,4 +1,4 @@
-package com.tgcannabis.config;
+package com.tgcannabis.edge_alerts.config;
 
 import io.github.cdimascio.dotenv.Dotenv;
 import lombok.Getter;
@@ -29,7 +29,7 @@ public class EdgeAlertConfig {
     }
 
     /**
-     * Gets a value from Dotenv or system environment, returning a default if not found.
+     * Gets a value from System env variables (Or Dotenv file as fallback), returning a default if not found.
      *
      * @param dotenv       Dotenv instance
      * @param varName      Environment variable name
@@ -37,12 +37,11 @@ public class EdgeAlertConfig {
      * @return The value found or the default value
      */
     private String getEnv(Dotenv dotenv, String varName, String defaultValue) {
-        String value = dotenv.get(varName);
-        if (value == null || value.trim().isEmpty()) {
-            LOGGER.warn("Environment variable '{}' not found or empty, using default: '{}'", varName, defaultValue);
-            return defaultValue;
-        }
-        return value;
+        String value = System.getenv(varName);
+        if (value != null) return value;
+
+        value = dotenv.get(varName);
+        return value != null ? value : defaultValue;
     }
 
     /**

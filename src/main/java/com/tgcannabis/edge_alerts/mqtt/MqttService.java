@@ -1,6 +1,6 @@
-package com.tgcannabis.mqtt;
+package com.tgcannabis.edge_alerts.mqtt;
 
-import com.tgcannabis.config.EdgeAlertConfig;
+import com.tgcannabis.edge_alerts.config.EdgeAlertConfig;
 import lombok.Setter;
 import org.eclipse.paho.client.mqttv3.MqttClient;
 import org.eclipse.paho.client.mqttv3.MqttConnectOptions;

@@ -1,9 +1,9 @@
-package com.tgcannabis;
+package com.tgcannabis.edge_alerts;
 
-import com.tgcannabis.alerts.AlertProcessor;
-import com.tgcannabis.config.AlertConfigLoader;
-import com.tgcannabis.config.EdgeAlertConfig;
-import com.tgcannabis.mqtt.MqttService;
+import com.tgcannabis.edge_alerts.alerts.AlertProcessor;
+import com.tgcannabis.edge_alerts.config.AlertConfigLoader;
+import com.tgcannabis.edge_alerts.config.EdgeAlertConfig;
+import com.tgcannabis.edge_alerts.mqtt.MqttService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 

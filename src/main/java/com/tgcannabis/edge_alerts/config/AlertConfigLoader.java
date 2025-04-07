@@ -1,7 +1,7 @@
-package com.tgcannabis.config;
+package com.tgcannabis.edge_alerts.config;
 
 import com.google.gson.Gson;
-import com.tgcannabis.model.SensorThreshold;
+import com.tgcannabis.edge_alerts.model.SensorThreshold;
 import com.google.gson.reflect.TypeToken;
 import lombok.Getter;
 import org.slf4j.Logger;
