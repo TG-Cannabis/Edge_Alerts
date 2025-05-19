@@ -12,7 +12,6 @@ import java.lang.reflect.Type;
 import java.util.Map;
 import java.util.Objects;
 
-
 /**
  * Loads sensor threshold configurations from a JSON file.
  * This class reads a configuration file containing sensor threshold settings

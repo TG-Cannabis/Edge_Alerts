@@ -54,7 +54,7 @@ public class AlertProcessor implements BiConsumer<String, String> {
         try {
             SensorData sensorData = gson.fromJson(payload, SensorData.class);
 
-            if (sensorData == null || sensorData.getSensorName() == null || sensorData.getSensorName().getId() == null) {
+            if (sensorData == null || sensorData.getSensorId() == null) {
                 LOGGER.warn("Skipping message due to incomplete data after serialization: {}", payload);
                 return;
             }
@@ -73,7 +73,7 @@ public class AlertProcessor implements BiConsumer<String, String> {
      */
     private void checkForAlert(SensorData data) {
         // Extract the sensor type from the incoming data and its given threshold configuration
-        String sensorType = data.getSensorName().getSensorType().toLowerCase();
+        String sensorType = data.getSensorType().toLowerCase();
         SensorThreshold threshold = configLoader.getThreshold(sensorType);
 
         if (threshold == null) {
@@ -122,7 +122,7 @@ public class AlertProcessor implements BiConsumer<String, String> {
      */
     private void generateAlert(SensorData data, SensorThreshold threshold, double percentageOut) {
         LOGGER.warn("ALERT: {} sensor has {}% values out of range in the last {} seconds. Value: {} (Expected: {} - {})",
-                data.getSensorName().getSensorType(),
+                data.getSensorType(),
                 percentageOut,
                 threshold.getTimeThreshold(),
                 data.getValue(),

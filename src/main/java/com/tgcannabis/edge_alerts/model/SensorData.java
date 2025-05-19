@@ -8,7 +8,9 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @NoArgsConstructor
 public class SensorData {
-    private SensorInformation sensorName;
+    private String sensorType;
+    private String location;
+    private String sensorId;
     private double value;
     private long timestamp;
 }
