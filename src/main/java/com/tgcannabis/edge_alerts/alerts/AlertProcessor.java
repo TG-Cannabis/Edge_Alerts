@@ -3,8 +3,12 @@ package com.tgcannabis.edge_alerts.alerts;
 import com.google.gson.Gson;
 import com.google.gson.JsonSyntaxException;
 import com.tgcannabis.edge_alerts.config.AlertConfigLoader;
+import com.tgcannabis.edge_alerts.model.AlertMessage;
 import com.tgcannabis.edge_alerts.model.SensorData;
 import com.tgcannabis.edge_alerts.model.SensorThreshold;
+import org.eclipse.paho.client.mqttv3.MqttClient;
+import org.eclipse.paho.client.mqttv3.MqttException;
+import org.eclipse.paho.client.mqttv3.MqttMessage;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -27,8 +31,10 @@ public class AlertProcessor implements BiConsumer<String, String> {
     private static final Logger LOGGER = LoggerFactory.getLogger(AlertProcessor.class);
     private static final Gson gson = new Gson();
 
-    final Map<String, List<SensorData>> history = new ConcurrentHashMap<>();
     private final AlertConfigLoader configLoader;
+    private final MqttClient mqttClient;
+
+    final Map<String, List<SensorData>> history = new ConcurrentHashMap<>();
     final Map<String, Long> firstEvaluationTime = new ConcurrentHashMap<>(); // Track first sensor data time
 
     /**
@@ -37,8 +43,9 @@ public class AlertProcessor implements BiConsumer<String, String> {
      * @param configLoader The loader responsible for fetching alert thresholds from a configuration file.
      * @throws NullPointerException if {@code configLoader} is {@code null}.
      */
-    public AlertProcessor(AlertConfigLoader configLoader) {
+    public AlertProcessor(AlertConfigLoader configLoader, MqttClient mqttClient) {
         this.configLoader = Objects.requireNonNull(configLoader, "Alert config loader cannot be null");
+        this.mqttClient = Objects.requireNonNull(mqttClient, "MQTT client cannot be null");
     }
 
     /**
@@ -139,7 +146,34 @@ public class AlertProcessor implements BiConsumer<String, String> {
      * @param data The sensor data that triggered the alert.
      */
     private void onAlertGenerated(SensorData data) {
-        // TODO: Define alert generation job
+        SensorThreshold threshold = configLoader.getThreshold(data.getSensorType().toLowerCase());
+        if (threshold == null) return;
+
+        double value = data.getValue();
+        String alertType = (value > threshold.getMax()) ? "too high" : "too low";
+        long duration = threshold.getTimeThreshold();
+
+        String message = String.format(
+                "%s has been %s for the last %d seconds",
+                data.getSensorType(), alertType, duration
+        );
+
+        AlertMessage alert = new AlertMessage(
+                data.getSensorType(),
+                value,
+                alertType,
+                duration,
+                message
+        );
+
+        String json = gson.toJson(alert);
+
+        try {
+            mqttClient.publish("alerts", new MqttMessage(json.getBytes()));
+            LOGGER.info("Published alert to MQTT topic [alerts]: {}", json);
+        } catch (MqttException e) {
+            LOGGER.error("Failed to publish alert message to MQTT", e);
+        }
     }
 
 }

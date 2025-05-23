@@ -1,6 +1,7 @@
 package com.tgcannabis.edge_alerts.mqtt;
 
 import com.tgcannabis.edge_alerts.config.EdgeAlertConfig;
+import lombok.Getter;
 import lombok.Setter;
 import org.eclipse.paho.client.mqttv3.MqttClient;
 import org.eclipse.paho.client.mqttv3.MqttConnectOptions;
@@ -21,6 +22,7 @@ public class MqttService implements AutoCloseable {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(MqttService.class);
 
+    @Getter
     private MqttClient mqttClient;
 
     private final EdgeAlertConfig config;

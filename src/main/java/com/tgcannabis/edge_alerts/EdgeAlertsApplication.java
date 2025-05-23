@@ -27,7 +27,7 @@ public class EdgeAlertsApplication {
         try (MqttService service = new MqttService(new EdgeAlertConfig())) {
             mqttService = service;
             AlertConfigLoader configLoader = new AlertConfigLoader();
-            AlertProcessor alertProcessor = new AlertProcessor(configLoader);
+            AlertProcessor alertProcessor = new AlertProcessor(configLoader, mqttService.getMqttClient());
             service.setMessageHandler(alertProcessor);
             service.connect();
             LOGGER.info("Edge Alerts Application started successfully and is now monitoring sensor data...");
