@@ -43,7 +43,7 @@ class MqttCustomCallbackTest {
     }
 
     @Test
-    void testMessageArrived_shouldCallHandler() throws Exception {
+    void testMessageArrived_shouldCallHandler() {
         MqttMessage message = new MqttMessage("hello".getBytes());
 
         assertDoesNotThrow(() -> callback.messageArrived("test/topic", message));
@@ -53,7 +53,7 @@ class MqttCustomCallbackTest {
 
 
     @Test
-    void testMessageArrived_shouldNotFailIfHandlerNull() throws Exception {
+    void testMessageArrived_shouldNotFailIfHandlerNull() {
         callback = new MqttCustomCallback(mockClient, "test/topic", null);
         MqttMessage message = new MqttMessage("payload".getBytes());
 
@@ -61,7 +61,7 @@ class MqttCustomCallbackTest {
     }
 
     @Test
-    void testMessageArrived_shouldLogErrorIfHandlerThrows() throws Exception {
+    void testMessageArrived_shouldLogErrorIfHandlerThrows() {
         doThrow(new RuntimeException("Handler error"))
                 .when(mockHandler).accept(anyString(), anyString());
 

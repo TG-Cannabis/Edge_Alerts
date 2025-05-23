@@ -11,7 +11,7 @@ import java.time.Instant;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
 
-public class AlertProcessorTest {
+class AlertProcessorTest {
     private AlertConfigLoader configLoader;
     private AlertProcessor alertProcessor;
 

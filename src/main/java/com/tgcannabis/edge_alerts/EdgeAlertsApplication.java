@@ -24,12 +24,12 @@ public class EdgeAlertsApplication {
      * - Registers a shutdown hook for graceful termination.
      */
     void start() {
-        try {
+        try (MqttService service = new MqttService(new EdgeAlertConfig())) {
+            mqttService = service;
             AlertConfigLoader configLoader = new AlertConfigLoader();
             AlertProcessor alertProcessor = new AlertProcessor(configLoader);
-            mqttService = new MqttService(new EdgeAlertConfig());
-            mqttService.setMessageHandler(alertProcessor);
-            mqttService.connect();
+            service.setMessageHandler(alertProcessor);
+            service.connect();
             LOGGER.info("Edge Alerts Application started successfully and is now monitoring sensor data...");
         } catch (Exception e) {
             LOGGER.error("FATAL: Application failed to start", e);

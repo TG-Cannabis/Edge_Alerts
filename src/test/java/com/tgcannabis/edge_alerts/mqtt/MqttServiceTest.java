@@ -52,7 +52,7 @@ class MqttServiceTest {
     }
 
     @Test
-    void connect_shouldLogAndRethrowException_whenMqttConnectFails() throws Exception {
+    void connect_shouldLogAndRethrowException_whenMqttConnectFails() {
         when(mockConfig.getMqttBroker()).thenReturn("tcp://localhost:1883");
         when(mockConfig.getMqttClientId()).thenReturn("test-client");
         when(mockConfig.getMqttTopic()).thenReturn("test/topic");
