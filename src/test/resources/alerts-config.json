@@ -1,0 +1,24 @@
+{
+  "temperature": {
+    "min": 10.0,
+    "max": 30.0,
+    "timeThreshold": 60,
+    "percentageThreshold": 95
+  },
+  "humidity": {
+    "min": 40.0,
+    "max": 70.0,
+    "timeThreshold": 30
+  },
+  "co2": {
+    "min": 300.0,
+    "max": 800.0,
+    "timeThreshold": 120,
+    "percentageThreshold": 80
+  },
+  "pressure": {
+    "min": 900.0,
+    "max": 1100.0,
+    "timeThreshold": 45
+  }
+}
