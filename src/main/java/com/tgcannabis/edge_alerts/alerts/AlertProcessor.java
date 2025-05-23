@@ -27,9 +27,9 @@ public class AlertProcessor implements BiConsumer<String, String> {
     private static final Logger LOGGER = LoggerFactory.getLogger(AlertProcessor.class);
     private static final Gson gson = new Gson();
 
-    private final Map<String, List<SensorData>> history = new ConcurrentHashMap<>();
+    final Map<String, List<SensorData>> history = new ConcurrentHashMap<>();
     private final AlertConfigLoader configLoader;
-    private final Map<String, Long> firstEvaluationTime = new ConcurrentHashMap<>(); // Track first sensor data time
+    final Map<String, Long> firstEvaluationTime = new ConcurrentHashMap<>(); // Track first sensor data time
 
     /**
      * Constructs an {@code AlertProcessor} with a specified configuration loader for sensor thresholds.
