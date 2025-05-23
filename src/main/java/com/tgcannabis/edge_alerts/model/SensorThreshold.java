@@ -1,8 +1,12 @@
 package com.tgcannabis.edge_alerts.model;
 
-import lombok.Getter;
+import lombok.*;
 
 @Getter
+@Setter
+@NoArgsConstructor
+@AllArgsConstructor
+@EqualsAndHashCode
 public class SensorThreshold {
     private double min;
     private double max;

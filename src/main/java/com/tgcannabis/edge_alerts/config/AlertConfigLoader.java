@@ -20,10 +20,10 @@ import java.util.Objects;
 @Getter
 public class AlertConfigLoader {
     private static final Logger LOGGER = LoggerFactory.getLogger(AlertConfigLoader.class.getName());
-    private static final Gson gson = new Gson();
     private static final String CONFIG_FILE = "/alerts-config.json";
 
     private final Map<String, SensorThreshold> thresholdsMap;
+    private final Gson gson;
 
     /**
      * Initializes the alert configuration loader by reading the configuration file.
@@ -31,6 +31,18 @@ public class AlertConfigLoader {
      * are {@link SensorThreshold} objects.
      */
     public AlertConfigLoader() {
+        this.thresholdsMap = loadConfig();
+        gson = new Gson();
+    }
+
+    /**
+     * Initializes the alert configuration loader with a provided Gson instance.
+     * This constructor is useful for dependency injection and testing.
+     *
+     * @param gson The Gson instance to use for JSON deserialization.
+     */
+    public AlertConfigLoader(Gson gson) {
+        this.gson = Objects.requireNonNull(gson, "Gson instance must not be null");
         this.thresholdsMap = loadConfig();
     }
 
@@ -42,11 +54,12 @@ public class AlertConfigLoader {
      */
     private Map<String, SensorThreshold> loadConfig() {
         try (InputStreamReader reader = new InputStreamReader(
-                Objects.requireNonNull(getClass().getResourceAsStream(CONFIG_FILE))
+                Objects.requireNonNull(getClass().getResourceAsStream(CONFIG_FILE),
+                        "Configuration file not found: " + CONFIG_FILE)
         )) {
             Type type = new TypeToken<Map<String, SensorThreshold>>() {
             }.getType();
-            return gson.fromJson(reader, type);
+            return gson.fromJson(reader, type); // Use the instance gson
         } catch (Exception e) {
             LOGGER.error("Error loading alert configuration: {}", e.getMessage(), e);
             throw new RuntimeException("Failed to load alert configuration", e);
