@@ -150,7 +150,7 @@ public class AlertProcessor implements BiConsumer<String, String> {
         if (threshold == null) return;
 
         double value = data.getValue();
-        String alertType = (value > threshold.getMax()) ? "too high" : "too low";
+        String alertType = (value > threshold.getMax()) ? "TOO_HIGH" : "TOO_LOW";
         long duration = threshold.getTimeThreshold();
 
         String message = String.format(
