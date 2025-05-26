@@ -22,7 +22,7 @@ public class EdgeAlertConfig {
                 .ignoreIfMissing()
                 .load();
         mqttBroker = getEnv(dotenv, "MQTT_BROKER", "tcp://localhost:1883");
-        mqttClientId = getEnv(dotenv, "MQTT_CLIENT_ID", "batch-processor-" + System.currentTimeMillis());
+        mqttClientId = getEnv(dotenv, "MQTT_CLIENT_ID", "edge-alert-" + System.currentTimeMillis());
         mqttTopic = getEnv(dotenv, "MQTT_TOPIC_FILTER", "sensors/#");
 
         logConfiguration();
