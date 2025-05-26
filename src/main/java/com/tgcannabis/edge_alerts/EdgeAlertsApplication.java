@@ -1,5 +1,6 @@
 package com.tgcannabis.edge_alerts;
 
+import com.google.gson.Gson;
 import com.tgcannabis.edge_alerts.alerts.AlertProcessor;
 import com.tgcannabis.edge_alerts.config.AlertConfigLoader;
 import com.tgcannabis.edge_alerts.config.EdgeAlertConfig;
@@ -24,12 +25,15 @@ public class EdgeAlertsApplication {
      * - Registers a shutdown hook for graceful termination.
      */
     void start() {
-        try (MqttService service = new MqttService(new EdgeAlertConfig())) {
-            mqttService = service;
-            AlertConfigLoader configLoader = new AlertConfigLoader();
-            AlertProcessor alertProcessor = new AlertProcessor(configLoader, mqttService.getMqttClient());
-            service.setMessageHandler(alertProcessor);
-            service.connect();
+        try {
+            AlertConfigLoader configLoader = new AlertConfigLoader(new Gson());
+            AlertProcessor alertProcessor = new AlertProcessor(configLoader);
+            mqttService = new MqttService(new EdgeAlertConfig());
+            mqttService.setMessageHandler(alertProcessor);
+            mqttService.connect();
+
+            alertProcessor.setMqttClient(mqttService.getMqttClient());
+
             LOGGER.info("Edge Alerts Application started successfully and is now monitoring sensor data...");
         } catch (Exception e) {
             LOGGER.error("FATAL: Application failed to start", e);

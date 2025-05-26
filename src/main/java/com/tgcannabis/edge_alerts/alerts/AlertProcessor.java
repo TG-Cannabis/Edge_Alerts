@@ -6,6 +6,7 @@ import com.tgcannabis.edge_alerts.config.AlertConfigLoader;
 import com.tgcannabis.edge_alerts.model.AlertMessage;
 import com.tgcannabis.edge_alerts.model.SensorData;
 import com.tgcannabis.edge_alerts.model.SensorThreshold;
+import lombok.Setter;
 import org.eclipse.paho.client.mqttv3.MqttClient;
 import org.eclipse.paho.client.mqttv3.MqttException;
 import org.eclipse.paho.client.mqttv3.MqttMessage;
@@ -32,7 +33,9 @@ public class AlertProcessor implements BiConsumer<String, String> {
     private static final Gson gson = new Gson();
 
     private final AlertConfigLoader configLoader;
-    private final MqttClient mqttClient;
+
+    @Setter
+    private MqttClient mqttClient;
 
     final Map<String, List<SensorData>> history = new ConcurrentHashMap<>();
     final Map<String, Long> firstEvaluationTime = new ConcurrentHashMap<>(); // Track first sensor data time
@@ -46,6 +49,16 @@ public class AlertProcessor implements BiConsumer<String, String> {
     public AlertProcessor(AlertConfigLoader configLoader, MqttClient mqttClient) {
         this.configLoader = Objects.requireNonNull(configLoader, "Alert config loader cannot be null");
         this.mqttClient = Objects.requireNonNull(mqttClient, "MQTT client cannot be null");
+    }
+
+    /**
+     * Constructs an {@code AlertProcessor} with a specified configuration loader for sensor thresholds.
+     *
+     * @param configLoader The loader responsible for fetching alert thresholds from a configuration file.
+     * @throws NullPointerException if {@code configLoader} is {@code null}.
+     */
+    public AlertProcessor(AlertConfigLoader configLoader) {
+        this.configLoader = Objects.requireNonNull(configLoader, "Alert config loader cannot be null");
     }
 
     /**
