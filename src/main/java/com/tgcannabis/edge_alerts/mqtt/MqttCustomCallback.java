@@ -94,6 +94,7 @@ public class MqttCustomCallback implements MqttCallbackExtended {
             try {
                 LOGGER.info("Subscribing to MQTT topic filter: {}", topicFilter);
                 mqttClient.subscribe(topicFilter, 1); // QoS 1: At least once
+                LOGGER.info("Subscribed to MQTT topic filter: {}", topicFilter);
             } catch (MqttException e) {
                 LOGGER.error("Error subscribing to MQTT topic filter '{}': {}", topicFilter, e.getMessage(), e);
             }
